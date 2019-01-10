@@ -1,8 +1,4 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/cheburan/yourvoice/master/media/logo.svg" width="300" align="center">
-</p>
-
-<p align="center">
 	<br>
 	<a href="">Visit the NINEtoFIVE website</a>
 </p>
