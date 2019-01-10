@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <script type="text/javascript" src="/javascripts/es6-promise.min.js"></script>
+  <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+  <script src="/javascripts/materialize.min.js"></script>
+  <script type="text/javascript" src="/javascripts/validator.min.js"></script>
+  <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+  <script>
+  $(document).ready(function(e) {
+    $(".button-collapse").sideNav();
+    //to display modified selects
+    $('select').material_select();
+    document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+  });
+  </script>
+</head>
+<body>
+  <script src="/javascripts/ajax.js"></script>
+  <script src="/javascripts/useful.js"></script>
+
+  <%- include('partials/navbar') %>
+
+  <main>
+
+    <%- include('partials/header') %>
+
+    <div class="container" id="app">
+      <div class="row">
+
+        <div class="col s12 m12 l6">
+          <p>
+            <strong>Truthfulness and honesty.</strong> <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is not a rumour mill.
+            <strong>Being constructive</strong>. Carefully consider how your post will contribute to the discussion.
+            <strong>Anonymity.</strong> Do not reveal your identity or the identity of others.
+            For more guidance see the NINEtoFIVE.work <a href="about#good_practices">code of conduct</a>.
+          </p>
+        </div>
+
+        <div class="col s12 m12 l6">
+
+          <div class="content-panel rounded-panel">
+            <h5>Create post</h5>
+            <form>
+              <div class="input-field">
+                <!-- <i class="material-icons prefix" class="purple-text">list</i> -->
+                <select id="categories" class="grey-text">
+                  <option value="" disabled selected>Choose the category *</option>
+                  <% data.forEach((entry) =>{ %>
+                    <option value="<%= entry.id %>"><span style="color: purple"><%= entry.cat_name%></span></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="input-field">
+                <!-- <i class="material-icons prefix">mode_edit</i> -->
+                <textarea id="message" class="materialize-textarea validate" required="" aria-required="true" data-length="5000"></textarea>
+                <label for="message">Message *</label>
+              </div>
+            </form>
+            <div id="result_form"></div>
+            <button class="btn-flat  <%=style.button_text_1%> waves-effect waves-light  <%=style.button_1%>" type="button" id="submitForm" @click="postMessage">Submit
+              <i class="material-icons right">send</i>
+            </button>
+                <!--<div class="row">
+                <div class="input-field col s6">
+                <i class="material-icons prefix">question_answer</i>
+                <select id="type" v-model="selected" required>
+                <option value="" disabled>Choose the type *</option>
+                <option value="1"   selected class="circle">Public</option>
+                <option value="0"  disabled class="circle">Private</option>
+                <label>Choose type of the message</label>
+              </select>
+            </div>
+            <div class="input-field col s6">
+            <i class="material-icons prefix">link</i>
+            <input id="link" type="password" class="validate">
+            <label for="link">Secure link</label>
+          </div>
+        </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress grey lighten-2" id="email_progress">
+    <div class="indeterminate  <%=style.button_1%>"></div>
+  </div>
+
+  </div>
+</div>
+
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>
+<script src="/javascripts/useful_func.js"></script>
+<script>
+$( document ).ready(function() {
+  // document.getElementById('create_link_li').classList.add('active');
+  // document.getElementById('create_link_side_li').classList.add('active');
+  $("#submitForm").click(
+    function(){
+      document.getElementById('result_form').innerHTML ="";
+      document.getElementById('email_progress').style.display = "block";
+      var resCheck = (validateText($("#message").val()) && validateArray($("#categories").val()));
+      //console.log(resCheck);
+      if (resCheck){
+        var formData = {
+          message: $("#message").val(),
+          author: 0,
+          categories: $("#categories").val(),
+          type: parseInt("1"),
+          link: ""
+        }
+        //console.log(formData);
+        axios.post('/api/insert_temp_message', formData)
+        .then(function (response) {
+          //console.log(response.data);
+          document.getElementById('email_progress').style.display = "none";
+          window.location = '/system/created?message=1';
+        })
+        .catch(function (error) {
+          document.getElementById('email_progress').style.display = "none";
+          //console.log(error);
+        })
+        return false;
+      } else {
+        document.getElementById('email_progress').style.display = "none";
+        document.getElementById('result_form').innerHTML ="<p style='color: red'>Please check if you've filled all fields and all options</p>";
+      }
+    }
+  );
+});
+</script>

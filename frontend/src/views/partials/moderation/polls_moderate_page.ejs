@@ -1,0 +1,76 @@
+<div class="progress grey lighten-2" id="email_progress">
+  <div class="indeterminate <%=style.button_1%>"></div>
+</div>
+
+<template v-for="item in items">
+  <div class="message-panel" v-bind="{ id: 'poll_card_' + item.id}">
+
+    <div class="message-panel--header">
+
+      <span class="category-label red-text left" v-show="item.published" :id="'textedition_sign'+ item.id"><strong>published</strong></span>
+      <span class="category-label green-text left" v-show="item.active" :id="'textedition_sign'+ item.id"><strong>active</strong></span>
+      <!--<div class="category-label" v-for="cat in item.cat_name" style="float: right">
+        {{cat}}
+      </div>-->
+      <div class="date"> Votes so far: {{item.votes}}</div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="message-panel--content">
+
+      <p v-bind="{ id: 'text' + item.id}" style="overflow-wrap: break-word">{{ item.question }}</p>
+
+      <input v-bind="{ id: 'text_hidden' + item.id}" style="display: none" value="" type="text">
+
+    </div>
+
+    <div class="message-panel--footer" style="padding: 15px">
+
+      <!--<div class="row" v-bind="{ id: 'textbuttons' + item.id}">
+
+        <div class="col s6">
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" id="renew" value="submit" @click="updateStatus(item.id, 2, 0, 'renew')" v-show="(item.moderation)">
+            Renew
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" id="archive" value="submit" @click="archiveMessage(item.id, 0)" v-show="!(item.archive_status) && !item.moderation">
+            Delete
+          </a>
+
+          <a class="btn-flat center waves-effect waves-light left" type="button" id="edit" value="submit" @click="editMessage(item.id, 0)" v-show="!(item.moderation)">
+            Edit Post
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 left" type="button" id="ok" value="submit" @click="saveArchiving(item.id, 1, 0)">Ok<i class="material-icons right">check</i></a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" id="nope" value="submit" @click="discardArchiving(item.id, 0)">Nope<i class="material-icons right">close</i></a>
+        </div>
+
+        <div class="col s6">
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light right green accent-4 " type="button" id="submit" value="submit" @click="updateStatus(item.id, 0, 0, 'submit')" v-show="!(item.moderation)">
+            Approve
+          </a>
+
+        </div>
+
+        <div class="col s12">
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 right" type="button" id="save" value="submit" @click="saveEditing(item.id, 0)">
+            Save
+
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" id="discard" value="submit" @click="discardEditing(item.id, 0)">
+            Cancel
+
+          </a>
+        </div>
+
+      </div>-->
+
+    </div>
+
+
+  </div>
+</template>

@@ -1,0 +1,170 @@
+<div class="content-panel rounded-panel">
+
+    <h5>The Whats, The Whys and The Hows of <a target="_blank" href="../">NINE<span style="font-size: 12px">TO</span>FIVE.<span style="font-size: 12px">WORK</span></a></h5>
+    <p style="font-size: 12px">For questions, comments or problems, please get in touch with <a href="<%=general.hoster_link%>" target="_blank"><%=general.hoster%></a> via our
+        <a id="feedback_link_1" href="">contact form</a>. </p>
+
+</div>
+
+<div class="content-panel rounded-panel">
+    <ul class="collapsible" data-collapsible="accordion">
+        <li>
+            <div class="collapsible-header acc-header"><span>1. </span>What are you trying to achieve with NINEtoFIVE.work?</div>
+            <div class="collapsible-body acc-body">
+                It is well known that employees are reluctant to raise issues about their workplaces for fear of being labelled as “difficult” or “uncooperative” colleagues (or worse).
+                Such fears, whether real or perceived, get in the way of creating the inclusive and reflective workplace.
+                <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is an attempt to address this concern. By providing a space where <%=general.users%> can securely and anonymously raise and discuss workplace concerns, we are hoping that it will serve as an effective new forum for workplace comment and discussion.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>2. </span>Is this a time-limited deployment?</div>
+            <div class="collapsible-body acc-body">
+                Yes, this is a time limited deployment. This will last from <%=about.deployment_dates%>. All <%=general.users%> at <%=general.organisation%> will have access to the system.
+                If by any chance you can't access system, but you think that you should please <a target="_blank" href="./feedback">contact us</a>.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>3. </span>Ok, how does that work?</div>
+            <div class="collapsible-body acc-body">
+                To access <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> you simply need to enter <%=about.email_reg_hoster%> (there is no account to create or password to remember).
+                The system then verifies this email as one that belongs to a <%=general.users_singular%> of the <%=general.email_provider%>, and then sends a private link to that email account. The private link allows you to securely and anonymously access <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a>.
+                The link can only be used once and will allow you to anonymously read and post messages and comments. To access <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> again you simply re-enter your email to generate a new private link.
+                You can change the email account that private links are sent to, for example, from your work email to a personal email, by visiting the “<a target="_blank" id="settings_link_3" href="../system/settings">Settings</a>” page once you have accessed the system.
+                When you access the system using the one-time private link, you can read others’ messages and comments, post your own messages and comments, vote messages up and down and participate in polls.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>4. </span>Are all my messages and comments immediately posted on the system?</div>
+            <div class="collapsible-body acc-body">
+                No, all posts are moderated before they are made available online, both to ensure constructive discussion and to minimise the risk that users accidentally post information that identifies themselves or others.
+                Moderators can do one of three things: (1) accept a post without any changes; (2) modify a post according to our <a href="#good_practices" onclick="open_li(9)">code of conduct</a>; (3) reject a post, in which case the post will be permanently deleted.
+                New (moderated) messages and comments are released through <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> <%=about.release_scheduler%>.
+                The moderators for this deployment of <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> will be <%=about.moderators%>.
+                Messages will be moderated independently by the moderators, and if any disagreements arise (for example edits or rejections) they will be resolved by the moderation team via video conferencing before the messages are posted.
+                Posts (or edited posts) on which moderators cannot agree will be rejected. As all posts in <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> are anonymous, moderators have no way to identify the authors of messages or comments.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>5. </span>How do I know this is anonymous and secure?</div>
+            <div class="collapsible-body acc-body">
+                <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> uses industry grade encryption (<a target="_blank" href="https://www.iso.org/standard/54531.html">Advanced Encryption Standard</a>) to ensure that all data transferred is secure.
+                Additionally, all connections to <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> are made using the <a target="_blank" href="https://tools.ietf.org/html/rfc5246">HTTPS</a> protocol.
+                The private link is generated randomly and is not linked to your email address in any way, and we do not keep a record of the email addresses that have either requested a link or have been sent a link.
+                There are no user accounts or other mechanisms to identify people who have used the system. For this deployment we will be monitoring the number of users for research purposes, however, this information is based on unique sessions and not on your email address so users will still be anonymous.
+                <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is hosted on servers that are external to <%=text.anon_external_to%>.
+                If you go to "<a target="_blank" href="../system/settings">Settings</a>" (once you have accessed the system) you can change the email address to which private links (which you use to access <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a>) are sent – from your <%=general.email_provider%> email account to your private email account.
+                Once this request has been verified, all future private links (by which you access the system) will be sent to your private email account.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>6. </span>I do not have a private email address, is it risky using my <%=general.email_provider%> email?</div>
+            <div class="collapsible-body acc-body">
+                No, however, there is always the possibility that another employee has access to your <%=general.email_provider%> email account and would be able to identify that you have been accessing <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a>.
+                If the <%=general.email_provider%> does not make it clear that such monitoring is happening then this would normally be in breach of the <a target="_blank" href="http://www.legislation.gov.uk/ukpga/1998/29/contents">Data Protection Act</a>, unless there were exceptional circumstances (e.g. the investigation of serious crime).
+                Of course, even if you do believe that someone is monitoring your email then the most they would be able to tell is that you have accessed <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> and the approximate date and time at which you did so.
+                They would not be able to identify what you have read or posted.
+                If you want to change the email that future private links are sent to (e.g. use Gmail or Hotmail instead of your <%=general.email_provider%> email) then you can do this on the “<a target="_blank" href="../system/settings">Settings</a>” page (once you have accessed the system).
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>7. </span>Who can see the messages on the system?</div>
+            <div class="collapsible-body acc-body">
+                Newly posted messages are queued for moderation and are not immediately displayed.
+                Batches of moderated messages are posted <%=about.release_scheduler%>. If a post is published (either as originally posted or in a modified form agreed on by the moderators) then any other user of <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> can read them, comment on them, and vote them up or down.
+                However, there is no way that we can prevent users of <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> re-publishing messages and comments, for example, on other social media platforms.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>8. </span>Great, I am happy that NINEtoFIVE.work is safe and secure. How do I get started?</div>
+            <div class="collapsible-body acc-body">
+                Any <%=general.user_singular_or%> at <%=general.organisation%> can access the system.
+                <ul>
+                    <li>(a) Go to <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a></li>
+                    <li>(b) Type in <%=about.email_reg_hoster%> <%=text.email_example%>. </li>
+                    <li>(c) <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> will immediately send a private link to your <%=general.email_provider%> email account (this may take up to five minutes to arrive depending on how busy the email service is at the time).  For some users this mail maybe detected as SPAM so check your SPAM or JUNK folders if you have not received the message.</li>
+                    <li>(d) Clicking on the private link in the email will give you full access to <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a>.  You can then browse and comment on messages, post your own messages, and up- and down-vote messages.</li>
+                    <li>(e) The private link can only be used once, so once you have logged out of <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> you will need to re-enter you University email in order to receive a new private link with which to access the system.</li>
+                    <li>(f) If you want to change the email that future private links are sent to (e.g. use Gmail or Hotmail instead of your <%=general.email_provider%> email) then you can do this on the “<a target="_blank" href="../system/settings">Settings</a>” page.</li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header"><span>9. </span>How are the messages and comments organised?</div>
+            <div class="collapsible-body acc-body">
+                When you access <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> using a private link, you’ll be able to see all the current messages and comments.
+                Messages are organised by category, most of which relate to the staff survey that was recently released.
+                There is also an "Other" category where you can discuss anything <%=general.organisation%> related, and where you can request new category.
+                Within each category, users can anonymously create new messages, post comments, vote each message as positive or negative.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header" id="good_practices"><span>10. </span>I am ready to post a message. Are there any restrictions on what I can write?</div>
+            <div class="collapsible-body acc-body">
+                Users of <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> are asked to follow our code of conduct:
+                <ul>
+                    <br>
+                    <li>
+                        (a) <strong>Truthfulness and honesty</strong>. <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is not intended to be a rumour mill.
+                        Please ensure that you have good reason to believe that what you are posting is actually true. Posts based upon first-hand experience, documentary evidence, or material that you have heard from multiple reliable sources are more likely to be true.
+                    </li>
+                    <br>
+                    <li>
+                        (b) <strong>Being constructive</strong>. When writing a post, please consider carefully how it might contribute to a discussion. Posts that are unnecessarily adversarial will be edited or rejected.
+                        It is also important to consider the wider consequences of what you are saying. <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is in practice a public forum, so what is published could have direct implications for other members of the <%=general.organisation%>.
+                        It is important that posts are intended to advance the improvement of the work environment at <%=general.organisation%>, rather than detract from it.
+                    </li>
+                    <br>
+                    <li>
+                        (c) <strong>Anonymity</strong>. A poorly drafted post risks exposing the identity of the author. Even if you are not concerned about your identity being revealed <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is intended to be an anonymous forum for communication.
+                        Phrasing, names, dates and references to small organisational groups can all provide clues to the identity of the author and risk <a target="_blank" href="http://www.macmillandictionary.com/dictionary/british/jigsaw-identification">jigsaw identification</a>. For example, rather than stating that “I'm a disability project worker and was told by my child services manager to..." to  "I know that a services manager told a project worker to...".
+                    </li>
+                    <br>
+                </ul>
+                Following these guidelines will help ensure that your posts are published without any modification by the moderators.
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header acc-header" id="good_practices"><span>11. </span>Isn’t NINEtoFIVE.work a research project?</div>
+            <div class="collapsible-body acc-body">
+                <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> (the system) is an outcome of Dinislam Abdulgalimov’s MRes in Digital Civics dissertation project (2017) funded by the <a target="_blank" href="https://www.epsrc.ac.uk/">Engineering and Physical Sciences Research Council</a> (EPSRC) Centre for Doctoral Training in Digital Civics (grant ref: <a target="_blank" href="http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/L016176/1">EP/L016176/1</a>), conducted in collaboration with <a target="_blank" href="<%=general.hoster_link%>"><%=general.hoster%></a>, and approved by the <a target="_blank" href="http://www.ncl.ac.uk/res/research/ethics_governance/ethics_procedures/approval-committees/sageethics.htm">SAgE Faculty Ethics Committee</a> (reference number: 17-ABD-022).
+                The project explored how digital technologies can be utilised to support employee voice in an organisation (in this case <%=general.organisation%>). The evaluation of this deployment of <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is being conducted as a subproject of the EPSRC Digital Economy Research Centre (grant ref: <a target="_blank" href="http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/L016176/1">EP/M023001/1</a>). This evaluation has been approved by SAgE Faculty Ethics Committee (reference number: 6793/2018).
+                In time, we hope to develop a <a target="_blank" href="../">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> so that it has a lasting positive impact on workplace culture at <%=general.organisation%> and other organisations.
+                This work is led by Dinislam Abdulgalimov and James Nicholson, who are both security and privacy researchers. Dinislam is now a doctoral researcher within the EPSRC Centre for Doctoral Training in <a href="https://digitalcivics.io/">Digital Civics</a> and James is a visiting researcher at Open Lab.
+
+            </div>
+        </li>
+    </ul>
+</div>
+
+    <!--<div id="share-buttons" class="row col s12">
+        <table style="width: 100%" id="shareTable">
+            <tr>
+                <td>
+                    <a href="mailto: <%=about.mailto%>">
+                        <img src="/images/icons/ic_email_black_48px.svg" alt="Share via email"><br>
+                    </a>
+                </td>
+                <td>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<%=general.host%>"
+                       onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                       target="_blank" title="Share on Facebook">
+                        <img src="/images/icons/facebook-box.svg" alt="Share via facebook">
+                    </a>
+                </td>
+                <td>
+                    <a href="https://twitter.com/share?url=<%=general.host%>&<%=about.twitter%>"
+                       onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                       target="_blank" title="Share on Twitter">
+                        <img src="/images/icons/twitter-box.svg" alt="Share via Twitter">
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>-->
+
+
+<style media="screen">
+  h6 {
+    padding-top: 20px;
+  }
+</style>

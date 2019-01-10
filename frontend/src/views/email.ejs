@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/materialize.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="javascripts/validator.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/cookieconsent.min.css" />
+    <script src="javascripts/cookieconsent.min.js"></script>
+
+    <script>
+      window.addEventListener("load", function(){
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#216942",
+              "text": "#b2d192"
+            },
+            "button": {
+              "background": "#afed71"
+            }
+          },
+          "position": "bottom-right",
+          "type": "opt-in",
+          "content": {
+            "href": "../cookie"
+          },
+          /*onInitialise: function (status) {
+            var type = this.options.type;
+            var didConsent = this.hasConsented();
+            if (type == 'opt-in' && didConsent) {
+              // enable cookies
+              var script = document.createElement('script');
+              script.src = 'https://www.google.com/recaptcha/api.js'
+              document.body.appendChild(script);
+            }  else {
+              document.getElementById('captcha_warning').style.display = "block";
+            }
+            if (type == 'opt-out' && !didConsent) {
+              // disable cookies
+              document.getElementById('captcha_warning').style.display = "block";
+            }
+          },*/
+          onStatusChange: function(status, chosenBefore) {
+            var type = this.options.type;
+            var didConsent = this.hasConsented();
+            if (type == 'opt-in' && didConsent) {
+              // enable cookies
+              document.getElementById('captcha_warning').style.display = "none";
+            }
+            if (type == 'opt-out' && !didConsent) {
+              // disable cookies
+            }
+          },
+        })});
+    </script>
+
+</head>
+<body>
+<script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
+<script src="javascripts/materialize.min.js"></script>
+<main>
+
+    <div class="main-brand">
+        <div class="container">
+            <a href="/" target="_self">
+                <img src="/images/logos/<%=general.logo%>" alt="Main Logo">
+            </a>
+        </div>
+    </div>
+
+    <div class="primary-banner"></div>
+
+    <div class="container">
+
+        <div class="page-wrapper page-wrapper-narrow">
+
+            <div class="content-panel rounded-panel">
+
+                <h1 class="center-align"><%= title %></h1>
+                <p class="center-align">Read what people are saying about <%=email.organisation%>.</p><br>
+                <p class="center-align">Find out more <a target="_blank" href="./about">here</a></p><br>
+                <p id="disclaimer" class="center-align">
+                    <%-email.note%>.
+                    <br>
+                    <strong>Please note that only <%=email.organisation%> <%=email.users%> have access to the system.</strong>
+                </p>
+
+                <% if (flashMessage) { %>
+
+                <div id="flash" class="card-panel red accent-2 center">
+                    <%= flashMessage %>
+                </div>
+
+                <% } %>
+
+                <form id="email_form">
+
+                    <div class="card-panel teal lighten-4" id="result_form" style="display: none;"></div>
+
+                    <div class="row">
+                        <%if (environment.email_domain === true) {%>
+                        <div id="email_div" class="input-field col s6 m8 l8">
+                            <input id="email" type="text" class=" right-align" required=""
+                                   aria-required="true" autocomplete="off" value="">
+                            <label for="email" ><%=email.placeholder%></label>
+                        </div>
+                        <% } else {%>
+                        <div id="email_div" class="input-field col s10 m10 l10">
+                            <input id="email" type="email" class="validate" required=""
+                                   aria-required="true" autocomplete="off" value="">
+                            <label for="email" data-error="wrong format" data-success="right format"><%=email.placeholder%></label>
+                        </div>
+                        <% } %>
+                        <span id="email_zone_span" class="email_zone"><%=environment.email_domain_name%></span>
+                    </div>
+                    <div>
+                        <p>
+                            <input type="checkbox" id="subscription" />
+                            <label for="subscription">Subscribe for daily email summaries of discussions</label>
+                        </p>
+                        <p>
+                            You will be emailed a private link to confirm your selection.<br>
+                            <span style="color: <%=style.span_color%>; font-weight: bold">NOTE:</span> If you subscribed already, you don't need to tick the box above every time you are accessing the system.
+                        </p>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <p id ="captcha_warning" style="display:none">Please Allow cookie and refresh page in order to use Site</p>
+                        <div class="g-recaptcha" data-sitekey="6LeITCoUAAAAALkPIv7Zb-2Ik3vRCzu3aZPq0XIF"
+                             data-callback="gResponse"></div>
+                    </div>
+
+                    <div class="row center-align">
+                        <button class="btn-flat btn-large white-text waves-effect waves-light green accent-4"
+                                type="button" id="submitEmail" value="Submit" disabled>Send Link
+                        </button>
+                    </div>
+                    <br>
+                </form>
+                <div id="back_panel" style="display: none" class="col s12">
+                    <p class="center-align" style="color: #3b2756; font-weight: bold">Please check your JUNK/SPAM folder if you can't find the email containing the private link in your Inbox.</p>
+                    <br>
+                    <p class="center-align">
+                        <a href="./"
+                           class="btn-flat <%=style.button_text_1%> waves-effect waves-light btn-large <%=style.button_1%>"
+                           id="start">Return</a>
+                    </p>
+                </div>
+
+                <div class="progress grey lighten-2" id="email_progress">
+                    <div class="indeterminate <%=style.button_text_1%>"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>
+<script src="javascripts/ajax.js"></script>
+<script src="javascripts/useful_func.js"></script>
+<script>
+    var res = "";
+    $(document).ready(function () {
+        document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/feedback');
+        $("#submitEmail").click(
+            function () {
+                grecaptcha.reset();
+                document.getElementById('submitEmail').disabled = true;
+                //$("#email").attr('value', '');
+                var em ='';
+                if (document.getElementById('email').type == "text") {
+                  em = validateText($("#email").val().toLowerCase());
+                } else {
+                  em = validateEmail($("#email").val().toLowerCase());
+                }
+                if (em) {
+                    var emailData = {
+                        user: $("#email").val().toLowerCase(),
+                        recaptcha: res,
+                        subscription: $('#subscription').is(':checked')
+                    }
+                    //console.log(emailData);
+                    sendAjaxForm('result_form', '/api/check', emailData, 'email_progress', 'email_form');
+                    document.getElementById('result_form').style.display = "none";
+                    document.getElementById('email_progress').style.display = "block";
+                    document.getElementById('email').value ="";
+                    document.getElementById('flash').style.display = "none";
+                    return false;
+                } else {
+                    document.getElementById('email').classList.add('error');
+                    document.getElementById('result_form').style.display="block";
+                    document.getElementById('result_form').innerHTML = "<p><span style='color: red; font-weight: bold'>Error:</span> Please check email again. Seems that you've entered wrongly formatted email. Valid example: <strong><%-email.email_address_example%></strong></p>" +
+                        "<p>If you are sure that you've entered valid email address and should have access to system, please use <a href='<%=email.host%>/feedback'>Feedback Form</a> to contact us</p>";
+                }
+
+            }
+        );
+
+        $('#email').focus(function () {
+          document.getElementById('result_form').style.display = "none";
+          document.getElementById('result_form').innerHTML = '';
+        })
+
+    });
+
+    function gResponse(g_response) {
+        res = g_response;
+        document.getElementById('submitEmail').disabled = false;
+    }
+
+</script>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<meta http-equiv="refresh" content="3;url=/system/browse" />-->
+    <script src="/javascripts/materialize.min.js"></script>
+    <script>
+      $(document).ready(function(e) {
+        $(".button-collapse").sideNav();
+        document.getElementById('about_link_li').classList.add('active');
+
+      });
+    </script>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  <main>
+    <%- include('partials/header') %>
+      <div class="container">
+          <%- include('partials/about_body') %>
+      </div>
+  </main>
+  <%- include('partials/footer') %>
+</body>
+</html>
+<script>
+  function open_li(number) {
+    $('.collapsible').collapsible('open', number);
+  }
+
+  function getParameterByName(name, url) {
+    console.log(name);
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+
+  $(document).ready(function(e) {
+    var loc = 'http://'+ window.location.host
+    console.log('This is loc2: ', loc);
+    console.log(window.location.href);
+    console.log(window.location.pathname);
+    loc = loc.replace(/(about)/, '');
+    document.getElementById('feedback_link_1').setAttribute('href', loc + '/system/feedback');
+    //document.getElementById('feedback_link_2').setAttribute('href', loc + '/system/feedback');
+    document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+
+    var point = getParameterByName('opt');
+    console.log(point);
+    if (point && point.length > 0){
+      try {
+        parseInt(point);
+        open_li(parseInt(point));
+      }
+      catch (err){
+        console.log(err)
+      }
+    }
+
+  });
+
+</script>

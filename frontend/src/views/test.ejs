@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- import vue framework -->
+      <script type="text/javascript" src="/javascripts/vue.js"></script>
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+      <!-- import axios for requests -->
+      <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+      <script src="/javascripts/materialize.min.js"></script>
+      <script>
+          $(document).ready(function(e) {
+            $(".button-collapse").sideNav();
+            //to display modified selects
+            $('select').material_select();
+          });
+      </script>
+  </head>
+  <body>
+  <%- include('partials/navbar') %>
+  <main>
+        <div class="container">
+            <h1 class="center-align"><%= title %></h1>
+            <p class="center-align">Welcome to <%= title %></p>
+            <div id="app">
+                <button class="btn" @click="retrieveData()">Push me</button>
+                <h5 v-cloak>{{message}}</h5>
+                <div class="row">
+                    <select v-model="selectedValue" class="col s10, m10, l10">
+                        <option v-for="(item, index) in response" :value="item.id">{{flag = index+1}}) {{item.cat_name}}</option>
+                    </select>
+                    <button class="btn">Search</button>
+                </div>
+                <br/>
+            </div>
+        </div>
+  </main>
+  <%- include('partials/footer') %>
+  </body>
+</html>
+
+<script>
+var app = new Vue({
+    el: "#app",
+    data: {
+        response: [],
+        message: 'This is ul: ',
+        selectedValue: 0,
+        res_lenght: 0,
+        flag: 0
+    },
+    watch: {
+        flag: function () {
+            if (this.flag === this.res_lenght){
+                $('select').material_select();
+            }
+        }
+    },
+    methods: {
+        retrieveData: function () {
+            //var app=this;
+            axios.post('/api/categories')
+                .then(function(res){
+                    app.flag = 0;
+                    app.response = res.data.data;
+                    app.res_lenght = res.data.length
+                })
+        }
+    }
+})
+</script>

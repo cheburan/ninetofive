@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- import vue framework -->
+      <script type="text/javascript" src="/javascripts/moment.min.js"></script>
+      <script type="text/javascript" src="/javascripts/vue.js"></script>
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+      <!-- import axios for requests -->
+      <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+      <script src="/javascripts/materialize.min.js"></script>
+      <script type="text/javascript" src="/javascripts/vue-avatar.min.js"></script>
+      <script>
+          $(document).ready(function(e) {
+            $(".button-collapse").sideNav();
+            document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+
+          });
+      </script>
+  </head>
+  <body>
+  <%- include('partials/navbar') %>
+  <main>
+        <div class="container">
+            <div class="card horizontal">
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p id="message_text"><i class="material-icons" id="flipped-image">format_quote</i> <i><%= message.data.text %></i> <i class="material-icons">format_quote</i></p>
+                    </div>
+                </div>
+            </div>
+
+            <!--comments part -->
+            <div id="app" class="comments-container">
+                <div class="progress grey lighten-2" id="email_progress">
+                  <div class="indeterminate <%=style.button_1%>"></div>
+                </div>
+                <input class ="post_id" id="post_id" style="display: none" value="<%=id%>">
+                <input id="initial_comment_id" style="display: none" value="<%=comment_id%>">
+                <div id="comment-box">
+                    <div class="input-field">
+                        <div class="row">
+                            <textarea id="commentText" class="materialize-textarea col s8 l8 m8" v-model="comment"></textarea>
+                            <label for="commentText">Leave Comment</label>
+                            <button class="btn right" @click="postComment" :disabled="!comment">Submit comment</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn waves-effect" @click="requestComments">Update comments</button>
+                <div id="comments">
+                    <ul class="collection with-header">
+                        <li class="collection-header"><h5>Comments</h5></li>
+                        <comment v-for="comment in comments" :comment="comment"></comment>
+                    </ul>
+                </div>
+                <div class="pagination center">
+                    <button class="btn" @click="requestComments(pagination.current, (pagination.current-2) * pagination.per_page)"
+                            :disabled="!pagination.prev">
+                        Prev
+                    </button>
+                    <span v-cloak>Page {{pagination.current}}</span>
+                    <button v-if="pagination.last >= pagination.per_page" class="btn" @click="requestComments(pagination.current, pagination.current * pagination.per_page)"
+                            :disabled="!pagination.last">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+  </main>
+  <%- include('partials/footer') %>
+
+  <template id="comment-template">
+      <li class= "collection-item avatar" v-bind="{style: 'padding-left: 10px;'+ initial_comment_func(comment.id)}">
+          <!--<img src="/images/avatar.png" alt="avatar" class="circle">-->
+          <div class="col s12 right-align date">{{date(comment.createdtime)}}</div>
+          <avatar :username="comment.author" id="action_left"></avatar>
+          <span class="title"> <strong>{{comment.author}}</strong> said:</span>
+          <p style="padding-left: 50px" id="message_text">{{comment.text}}</p>
+          <!--<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>-->
+      </li>
+  </template>
+  </body>
+</html>
+<script type="text/javascript" src="/javascripts/vue_comments_moderation_post.js"></script>

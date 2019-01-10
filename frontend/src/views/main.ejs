@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <!-- import vue framework -->
+      <script type="text/javascript" src="/javascripts/vue.js"></script>
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+      <!-- import axios for requests -->
+      <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+      <script src="/javascripts/materialize.min.js"></script>
+      <script>
+          $(document).ready(function(e) {
+            $(".button-collapse").sideNav();
+            //to display modified selects
+            $('select').material_select();
+            document.getElementById('cat_link_li').classList.add('active');
+          });
+      </script>
+  </head>
+  <body>
+  <%- include('partials/navbar') %>
+  <main>
+      <% if (aFlag) {%>
+      <div>
+          <a class="btn-floating btn-large waves-effect waves-light red" href="<%= addition.pLink %>"><i class="material-icons">mode_edit</i></a>
+      </div>
+      <%}%>
+        <div class="container" id="app">
+            <div class="row">
+                    <div class="col s12">
+                    <br>
+                      <ul class="tabs">
+                        <li class="tab col s3" value=0 @click="requestData(0)"><a class="active" href="#latest_tab">Latest</a></li>
+                        <li class="tab col s3" value=<%= categories[0].id %> @click="requestData(<%= categories[0].id%>)"><a href="#second"><%= categories[0].cat_name %></a></li>
+                        <li class="tab col s3" value=<%= categories[1].id %>  @click="requestData(<%= categories[1].id%>)"><a href="#third"><%= categories[1].cat_name %></a></li>
+                        <li class="tab col s3"><a href="#search" @click="requestCategories()">All</a></li>
+                      </ul>
+                        <br>
+                    </div>
+                    <div class="pagination center">
+                        <button class="btn" @click="requestData(cat, (pagination.current-2) * pagination.per_page)"
+                                :disabled="!pagination.prev">
+                            Prev
+                        </button>
+                        <span v-cloak>Page {{pagination.current}}</span>
+                        <button v-if="pagination.last >= pagination.per_page" class="btn" @click="requestData(cat, pagination.current * pagination.per_page)"
+                                :disabled="!pagination.last">
+                            Next
+                        </button>
+                    </div>
+                    <div id="latest_tab" class="col s12"><%- include('partials/main/latest_tab') %></div>
+                    <div id="second" class="col s12"><%- include('partials/main/second') %></div>
+                    <div id="third" class="col s12"><%- include('partials/main/third') %></div>
+                    <div id="search" class="col s12"><%- include('partials/main/search') %></div>
+            </div>
+
+            <div class="pagination center">
+                <button class="btn" @click="requestData(cat, (pagination.current-2) * pagination.per_page)"
+                        :disabled="!pagination.prev">
+                    Prev
+                </button>
+                <span>Page {{pagination.current}}</span>
+                <button v-if="pagination.last >= pagination.per_page" class="btn" @click="requestData(cat, pagination.current * pagination.per_page)"
+                        :disabled="!pagination.last">
+                    Next
+                </button>
+            </div>
+
+        </div>
+  </main>
+  <%- include('partials/footer') %>
+  <template id="post-template">
+      <div class="card horizontal">
+          <div class="card-stacked">
+              <div class="card-content">
+                  <p><i class="material-icons" id="flipped-image">format_quote</i> <i>{{ item.text }}</i> <i class="material-icons">format_quote</i></p>
+              </div>
+              <br/>
+              <div class="center">
+                  <div class="chip" v-for="cat in item.cat_name"> {{cat}}</div>
+              </div>
+              <div class="card-action">
+                  <div id="action_left" class="col s5 m5 l5 valign-wrapper">
+                      <div class="child left" id="arrow_up"><i class="material-icons" id="arrow_up" :class="{disabled: upvoted}" @click="upvote(item.id)" >keyboard_arrow_up</i></div>
+                      <div class="child left valign-wrapper" id="score"><span id="score" style="margin: 5px">{{ votes }}</span></div>
+                      <div class="child left" id="arrow_down"><i class="material-icons" id="arrow_up" @click="downvote(item.id)" :class="{disabled: downvoted}" >keyboard_arrow_down</i></div>
+                  </div>
+                  <div class="right-align col s7 m7 l7" id="action_right">
+                      <a v-bind="{ href:'/system/post?id=' + item.id }" class="waves-effect waves-light" type="button" id="comments" value="submit" >Comments ({{ item.count }})<i class="material-icons right">comment</i></a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </template>
+
+  </body>
+</html>
+
+<script>
+Vue.component('post', {
+    template: '#post-template',
+    props: ['item'],
+    data: function () {
+        return {
+            upvoted: false,
+            downvoted: false
+        };
+    },
+    methods: {
+        upvote: function (id) {
+            this.upvoted = !this.upvoted;
+            this.downvoted = false;
+            this.requestUpdateVotes(id, 1)
+        },
+        downvote: function (id) {
+            this.downvoted = !this.downvoted;
+            this.upvoted = false;
+            this.requestUpdateVotes(id, 0)
+        },
+        requestUpdateVotes: function (id, type) {
+            var updCmd = {
+                id: id,
+                type: type
+            };
+            axios.post('/api/update_votes', updCmd)
+                .then(function (response) {
+                    //console.log(response.data);
+                })
+                .catch(function (error) {
+                    //console.log(error)
+                })
+        }
+    },
+    computed: {
+        votes: function() {
+            if (this.upvoted) {
+                return this.item.votes + 1;
+            } else if (this.downvoted) {
+                return this.item.votes - 1;
+            } else {
+                return this.item.votes;
+            }
+        }
+    }
+})
+
+var app = new Vue({
+    el: "#app",
+    data: {
+        cat: 0,
+        off: 0,
+        ord: 0,
+        items: [],
+        item: "",
+        categories: [],
+        pagination: {
+            current: 1,
+            per_page: 10,
+            prev: 0,
+            last:1
+        },
+        first: false
+    },
+    methods: {
+        requestData: function (cat, offs=0, ordr=0 ) {
+            var app = this
+            if (!((cat === app.cat) && (offs === app.off) && app.first)) {
+                app.first = true;
+                app.cat = cat;
+                app.off = offs;
+                app.ord = ordr;
+
+                var command = {
+                    category: cat,
+                    offset: offs,
+                    order: ordr
+                };
+
+                document.getElementById('email_progress').style.display = "block";
+                axios.post('/api/get_pub_messages', command)
+                    .then(function (response) {
+                        //app.$set('items', response.data.data);
+
+                        app.items = response.data.data;
+                        //console.log(response.data);
+                        document.getElementById('email_progress').style.display = "none";
+                        app.makePagination(response.data.pagination)
+                    })
+                    .catch(function (error) {
+                        document.getElementById('email_progress').style.display = "none";
+                        app.items = [{"text": error}];
+                    })
+            }
+
+        },
+
+        makePagination: function (pag) {
+            app.pagination = {
+                current: pag.current_page,
+                per_page: pag.per_page,
+                prev: pag.current_page - 1,
+                last: pag.last
+            }
+        },
+
+        requestCategories: function () {
+            var app = this;
+            //app.items = [];
+            //document.getElementById('email_progress').style.display = "block";
+            axios.get('/api/categories')
+                    .then(function (response) {
+                        app.categories = response.data.data;
+                        //console.log(response.data.data);
+                        //document.getElementById('email_progress').style.display = "none";
+                    })
+                    .catch(function (error) {
+                        //document.getElementById('email_progress').style.display = "none";
+                        app.categories = [{"text": error}];
+                    })
+
+        }
+    },
+    mounted(){
+        this.requestData(0,0,0);
+
+    }
+})
+
+</script>

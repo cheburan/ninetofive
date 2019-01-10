@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
+      <script src="javascripts/materialize.min.js"></script>
+  </head>
+  <body>
+  <%- include('partials/navbar') %>
+  <main>
+        <% if (emailAdd) { %>
+            <div style="background-color: rgba(255,121,21,0.3)" id="warning">
+                <p class="center-align">Seems that you don't have additional private email. Adding email will increase your privacy</p>
+                <p class="center-align">
+                    <a class="waves-effect waves-light btn-flat pink lighten-1" href="system/settings" id = "addE">Add</a>
+                    <a class="waves-effect waves-light btn-flat red" id="dismis">Dismiss</a>
+                </p>
+
+            </div>
+        <% } %>
+        <div class="container">
+            <h5 class="center-align"><%= title %></h5>
+            <p class="center-align"><img  src="images/megaphone2.png"></p>
+            <h5 class="center-align"> Want to say something?</h5>
+            <p class="center-align"><a class="waves-effect waves-light btn-large pink lighten-1" href="system/create" id = "start">Create post</a></p>
+            <br>
+            <br>
+            <h5 class="center-align"> Or you want to check what others have written?</h5>
+            <p class="center-align"><a class="waves-effect waves-light btn-large pink lighten-1" href="system/browse" id = "browse"> Check posts</a></p>
+            <br>
+        </div>
+
+  </main>
+  <%- include('partials/footer') %>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function(e) {
+    $(".button-collapse").sideNav();
+    $('select').material_select();
+    document.getElementById('main_link_li').classList.add('active');
+    /*document.getElementById('dismis').onclick = function() {
+      document.getElementById('warning').style.display = "none";
+    }*/
+  });
+
+</script>

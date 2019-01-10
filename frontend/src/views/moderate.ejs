@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <!-- import vue framework -->
+      <script type="text/javascript" src="/javascripts/vue.js"></script>
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script type="text/javascript" src="/javascripts/es6-promise.min.js"></script>
+      <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+      <!-- import axios for requests -->
+      <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+      <script src="/javascripts/materialize.min.js"></script>
+      <script type="text/javascript" src="/javascripts/moment.min.js"></script>
+      <script>
+          $(document).ready(function(e) {
+            $(".button-collapse").sideNav();
+            firstRequest(0);
+            document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+
+          });
+      </script>
+  </head>
+  <body>
+      <%- include('partials/navbar') %>
+      <input value="<%=hash%>" style="display: none" id="hash">
+      <main id="app">
+
+        <!-- <%- include('partials/header') %> -->
+
+        <div class="page-header">
+          <div class="container" style="position:relative">
+            <h1><%= title %></h1>
+
+            <div style="position: absolute; right:0;top:0px">
+
+              <div class="btn-flat waves-effect waves-light <%=style.button_text_1%> <%=style.button_1%>" id="post_tab_btn" onClick="toggleView(0)" @click="requestData(cat, 0, 0, 0, step, chosen_cat)">
+                Posts
+              </div>
+
+              <div class="btn-flat waves-effect waves-light <%=style.button_text_1%> grey lighten-1" id="comments_tab_btn" onClick="toggleView(1)" @click="requestData(cat, 0, 0, 1, step, chosen_cat)">
+                Comments
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="container">
+          <div class="row">
+
+            <div class="row" style="margin: 30px 0 10px 0px">
+                <div class="col s4"><button class="btn-flat <%=style.button_text_1%> waves-effect waves-light center col s12" id="approve_cat" @click="requestData(cat, 0, 0, type, 0, 'approve_cat')" :style="chosen_cat_func('approve_cat')">Pending approval</button></div>
+                <div class="col s4"><button class="btn-flat <%=style.button_text_1%> waves-effect waves-light center col s12" id="submit_cat" @click="requestData(cat, 0, 0, type, 1, 'submit_cat')" :style="chosen_cat_func('submit_cat')">Pending submission</button></div>
+                <div class="col s4"><button class="btn-flat <%=style.button_text_1%> waves-effect waves-light center col s12" id="archive_cat" @click="requestData(cat, 0, 0, type, 2, 'archive_cat')" :style="chosen_cat_func('archive_cat')">Pending archiving</button></div>
+            </div>
+
+            <div class="row" style="margin: 0 0 20px 0" hidden>
+              <ul class="tabs">
+                  <li class="tab col s6" value=0 @click="requestData(cat, 0, 0, 0, step)"><a class="active pink-text" href="#post_tab">Posts</a></li>
+                  <li class="tab col s6" ><a class="pink-text" href="#comments_tab" @click="requestData(cat, 0, 0, 1, step)">Comments</a></li>
+              </ul>
+            </div>
+
+            <div class="pagination center" hidden>
+              <button v-if="pagination.current > 1" class="btn <%=style.pagination_button_1%>" @click="requestData(cat, (pagination.current-2) * pagination.per_page, type, step)"
+                      :disabled="!pagination.prev">
+                  Prev
+              </button>
+              <span>Page {{pagination.current}}</span>
+              <button v-if="pagination.last >= pagination.per_page" class="btn <%=style.pagination_button_1%>" @click="requestData(cat, pagination.current * pagination.per_page, type, step)"
+                      :disabled="!pagination.last">
+                Next
+              </button>
+            </div>
+
+            <!-- Tabs content -->
+            <div id="post_tab" class="col s12"><%- include('partials/moderation/posts_moderate_page') %></div>
+            <div id="comments_tab" class="col s12"><%- include('partials/moderation/comments_moderate_page') %></div>
+
+          </div>
+
+          <div class="pagination center">
+              <button v-if="pagination.current > 1" class="btn <%=style.pagination_button_1%>" @click="requestData(cat, (pagination.current-2) * pagination.per_page, ord, type, step, chosen_cat)"
+                      :disabled="!pagination.prev">
+                  Prev
+              </button>
+              <span>Page {{pagination.current}}</span>
+              <button v-if="pagination.last >= pagination.per_page" class="btn <%=style.pagination_button_1%>" @click="requestData(cat, pagination.current * pagination.per_page, ord, type, step, chosen_cat)"
+                      :disabled="!pagination.last">
+                  Next
+              </button>
+          </div>
+
+        </div>
+    </main>
+    <%- include('partials/footer') %>
+  </body>
+</html>
+
+<script>
+var app = new Vue({
+    el: "#app",
+    data: {
+        cat: 0,
+        off: 0,
+        ord: 0,
+        type: 0,
+        step: 0,
+        items: [],
+        chosen_cat: "approve_cat",
+        categories: [],
+        pagination: {
+            current: 1,
+            per_page: 10,
+            prev: 0,
+            last:1
+        }
+    },
+    methods: {
+        requestData: function (cat, offs, ordr, type, step, id) {
+            var app = this
+            if (!((cat === app.cat) && (offs === app.off) && (type === app.type) && (step === app.step))) {
+                console.log(cat, offs, ordr, type, step, id);
+                app.items = [];
+                app.cat = cat;
+                app.off = offs;
+                app.ord = ordr;
+                app.type = type;
+                app.step = step;
+                app.chosen_cat = id;
+
+                document.getElementById('email_progress').style.display = "block";
+
+                if (type === 1){
+
+                  var commandComments = {
+                    offset: offs,
+                    order: ordr,
+                    step: step
+                  };
+
+                  axios.post('/api/get_temp_comments', commandComments)
+                  .then(function (response) {
+                    //app.$set('items', response.data.data);
+                    app.items = response.data.data;
+                    console.log(response.data);
+                    document.getElementById('email_progress').style.display = "none";
+                    app.makePagination(response.data.pagination)
+                  })
+                  .catch(function (error) {
+                    document.getElementById('email_progress').style.display = "none";
+                    app.items = [{"text": error}];
+                  })
+
+
+                } else{
+                      var commandPosts = {
+                            category: cat,
+                            offset: offs,
+                            order: ordr,
+                            step: step
+                      };
+
+                      axios.post('/api/get_temp_pub_messages', commandPosts)
+                      .then(function (response) {
+                        //app.$set('items', response.data.data);
+                        app.items = response.data.data;
+                        console.log(response.data);
+                        document.getElementById('email_progress').style.display = "none";
+                        app.makePagination(response.data.pagination)
+                      })
+                      .catch(function (error) {
+                        document.getElementById('email_progress').style.display = "none";
+                        app.items = [{"text": error}];
+                      })
+                }
+            }
+
+        },
+
+        makePagination: function (pag) {
+            app.pagination = {
+                current: pag.current_page,
+                per_page: pag.per_page,
+                prev: pag.current_page - 1,
+                last: pag.last
+            }
+        },
+
+        chosen_cat_func: function(name){
+          if (name === this.chosen_cat){
+            return 'background-color: #EC407A;'
+          }else {
+            return 'background-color: #BDBDBD'
+          }
+        },
+
+        datetime: function(time){
+          return moment(time).format("DD.MM.YY");
+        },
+
+        controversial: function (appr, rej) {
+            if (parseInt(appr)>0 && parseInt(rej)>0){
+              return true
+            }else {
+              return false
+            }
+        },
+
+        check_admin_approval: function (arr){
+          if (arr[0] !== null) {
+            var fl = null;
+            for (var i = 0; i < arr.length; i++) {
+              if (arr[i].split(":")[0] === document.getElementById('hash').value) {
+                if (arr[i].split(":")[1] === "true"){
+                  //return "You approved this"
+                  fl = true;
+                  return fl
+                } else if (arr[i].split(":")[1] === "false") {
+                  //return "You rejected this"
+                  fl = false
+                  return fl
+                } else {
+                  //return ""
+                  return null
+                }
+              }
+            }
+            return fl
+          } else {
+            return null
+          }
+        },
+
+
+      check_approval_count: function (app_true){
+          var appr = null;
+            if (parseInt(app_true) > 0) {
+              appr = true
+            } else {
+              appr = false
+            }
+            console.log("THIS IS approval:", appr);
+          return appr
+      },
+
+        /*requestCategories: function () {
+            var app = this;
+            app.items = [];
+            document.getElementById('email_progress').style.display = "block";
+            axios.post('/api/categories')
+                    .then(function (response) {
+                        app.categories = response.data.data;
+                        console.log(response.data.data);
+                        document.getElementById('email_progress').style.display = "none";
+                    })
+                    .catch(function (error) {
+                        document.getElementById('email_progress').style.display = "none";
+                        app.categories = [{"text": error}];
+                    })
+
+        }*/
+
+        editMessage: function (id, type) {
+            var element = 'text';
+            if (type === 1) element = 'comment';
+            var text = document.getElementById(element + id);
+            var ta = document.createElement('textarea');
+            var old_text = document.getElementById(element + '_hidden' + id);
+            ta.setAttribute('class', 'materialize-textarea');
+            ta.setAttribute('id', 'tarea' + id);
+            ta.innerHTML = text.innerHTML;
+            old_text.value = text.innerHTML;
+            console.log(text.innerHTML);
+            console.log(old_text.value);
+            text.parentNode.replaceChild(ta, text);
+            document.querySelector('#' + element + 'buttons' + id + ' #edit' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #archive' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #submit' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #save' + id).style.display = "block";
+            document.querySelector('#' + element + 'buttons' + id + ' #discard' + id).style.display = "block";
+            document.getElementById(element + 'original' + id).style.display = "block";
+            document.querySelector('#' + element + 'reason' + id).style.display = "block";
+
+        },
+
+          archiveMessage: function (id, type) {
+            var element = 'text';
+            if (type === 1) element = 'comment';
+            document.querySelector('#' + element + 'buttons' + id + ' #edit' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #archive' + id).style.display = "none";
+            //document.querySelector('#' + element + 'buttons' + id + ' #submit').style.display = "none";
+            //document.querySelector('#' + element + 'buttons' + id + ' #renew').style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #ok' + id).style.display = "block";
+            document.querySelector('#' + element + 'buttons' + id + ' #nope' + id).style.display = "block";
+            document.querySelector('#' + element + 'reason' + id).style.display = "block";
+
+          },
+
+        discardEditing: function (id, type) {
+          var element = 'text';
+          if (type === 1) element = 'comment';
+            var ta = document.getElementById('tarea' + id);
+            var text = document.createElement('p');
+            text.setAttribute('id', element + id);
+            text.innerHTML = ta.innerHTML;
+            ta.parentNode.replaceChild(text, ta);
+            document.querySelector('#' + element + 'buttons' + id + ' #edit' + id).style.display = "block";
+            document.querySelector('#' + element + 'buttons' + id + ' #archive' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #submit' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #save' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #discard' + id).style.display = "none";
+            document.getElementById(element + '_hidden' + id).value = "";
+            document.querySelector('#' + element + 'reason' + id).style.display = "none";
+            document.querySelector('#' + element + 'reason' + id).value = "";
+            document.getElementById(element + 'original' + id).style.display = "none"
+
+        },
+
+          discardArchiving: function (id, type) {
+            var element = 'text';
+            if (type === 1) element = 'comment';
+            document.querySelector('#' + element + 'buttons' + id + ' #edit' + id).style.display = "block";
+            document.querySelector('#' + element + 'buttons' + id + ' #archive' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #submit' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #ok' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #nope' + id).style.display = "none";
+            document.getElementById(element + '_hidden' + id).value = "";
+            document.querySelector('#' + element + 'reason' + id).style.display = "none";
+            document.querySelector('#' + element + 'reason' + id).value = "";
+
+          },
+
+          saveArchiving: function (id, status, type) {
+            var element = 'text';
+            if (type === 1) element = 'comment';
+            var reason = document.querySelector('#' + element + '_reason_input' + id).value;
+            document.querySelector('#' + element + 'buttons' + id + ' #edit' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #archive' + id).style.display = "nonr";
+            document.querySelector('#' + element + 'buttons' + id + ' #submit' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #ok' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #nope' + id).style.display = "none";
+            document.querySelector('#' + element + 'reason' + id).style.display = "none";
+            app.updateStatus(id, status, type, reason);
+            document.querySelector('#' + element + '_reason_input' + id).value = '';
+          },
+
+        saveEditing: function (id, type) {
+          var element = 'text';
+          var addr = "/api/update_temp_message";
+          if (type === 1) {
+            element = 'comment';
+            addr = "/api/update_temp_comment";
+          }
+            var ta = document.getElementById('tarea' + id);
+            var text = document.createElement('p');
+            var reason = document.querySelector('#' + element + '_reason_input' + id).value;
+            text.setAttribute('id', element + id);
+            text.innerHTML = ta.value;
+            ta.parentNode.replaceChild(text, ta);
+            document.querySelector('#' + element + 'buttons' + id + ' #edit' + id).style.display = "block";
+            document.querySelector('#' + element + 'buttons' + id + ' #archive' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #submit' + id).style.display = "inherit";
+            document.querySelector('#' + element + 'buttons' + id + ' #save' + id).style.display = "none";
+            document.querySelector('#' + element + 'buttons' + id + ' #discard' + id).style.display = "none";
+            document.querySelector('#' + element + 'reason' + id).style.display = "none";
+            document.getElementById(element + 'original' + id).style.display = "none";
+            var data = {
+                "id": id,
+                "text": ta.value,
+                "reason": reason,
+                "old_text": document.getElementById(element + '_hidden' + id).value
+            };
+            document.getElementById(element + '_hidden' + id).value = "";
+            console.log("This is ", data);
+            axios.post(addr, data)
+                .then(function (response) {
+                    console.log("This is responce ", response.data.data);
+                    document.querySelector('#' + element + '_reason_input' + id).value='';
+                    document.getElementById(element + 'edition_sign' + id).style.display = "inline";
+                    var or = document.querySelector('#' + element + 'original' + id + ' #original_text');
+                    if (or.innerHTML === ''){
+                      or.innerHTML = data['old_text'];
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        },
+
+        updateStatus: function (id, status, type, reason) {
+            var data = {
+              "id": id,
+              "status": status,
+              "reason": reason
+            };
+            var addr = "/api/update_message_status_remote";
+            var element = 'text';
+            if (type === 1) {
+              element = 'comment';
+              addr = "/api/update_comment_status_remote";
+            }
+            axios.post(addr, data)
+                .then(function (response) {
+                    console.log(response.data.data);
+                    console.log(response.data.flag);
+                    //do with VueJS in future
+                    document.getElementById(element + 'approve' + id).innerHTML = response.data.data[0].app_number_true;
+                    document.getElementById(element + 'reject' + id).innerHTML = response.data.data[0].app_number_false;
+                    document.getElementById(element + 'status' + id).innerHTML = response.data.message;
+                    var el = document.getElementById(element + 'card' + id)
+                    if (app.controversial(parseInt(response.data.data[0].app_number_true), parseInt(response.data.data[0].app_number_false))){
+                      el.classList.add("contr");
+                    } else {
+                      el.classList.remove("contr");
+                    }
+                    if (response.data.flag){
+                      document.getElementById(element + 'card' + id).style.display = "none"
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+        }
+
+    }
+})
+
+
+function  firstRequest(cat, offs, ordr) {
+
+                var command = {
+                    category: 0,
+                    offset: 0,
+                    order: 0
+                };
+
+                document.getElementById('email_progress').style.display = "block";
+                axios.post('/api/get_temp_pub_messages', command)
+                    .then(function (response) {
+                        //app.$set('items', response.data.data);
+                        app.items = response.data.data;
+                        console.log(response.data);
+                        document.getElementById('email_progress').style.display = "none";
+                        app.makePagination(response.data.pagination)
+                    })
+                    .catch(function (error) {
+                        document.getElementById('email_progress').style.display = "none";
+                        app.items = [{"text": error}];
+                    })
+
+}
+
+function emptyChecker() {
+    console.log(this);
+    //console.log (id, element);
+    //var x = document.getElementById(element + '_reason_input' + id).value;
+    //console.log(x);
+    /*if (!x || x.length === 0){
+      document.getElementById("ok" + id).disabled = false;
+    } else {
+      document.getElementById("ok" + id).disabled = true;
+    }*/
+}
+
+function toggleView(index) {
+  switch (index) {
+    case 0:
+      $('#post_tab_btn').addClass('<%=style.button_1%>');
+      $('#post_tab_btn').removeClass('grey');
+      $('#post_tab').show();
+      $('#comments_tab').hide();
+      $('#comments_tab_btn').addClass('grey');
+      $('#comments_tab_btn').removeClass('<%=style.button_1%>');
+      break;
+    case 1:
+      $('#comments_tab_btn').addClass('<%=style.button_1%>');
+      $('#comments_tab_btn').removeClass('grey');
+      $('#comments_tab').show();
+      $('#post_tab').hide();
+      $('#post_tab_btn').addClass('grey');
+      $('#post_tab_btn').removeClass('<%=style.button_1%>');
+      break;
+    default:
+
+  }
+
+}
+</script>
+
+<style media="screen">
+  #admin-link {
+    right: 70px;
+  }
+  #search {
+    padding-bottom: 20px;
+  }
+  #filter-wrapper {
+    padding: 0;
+    top: -10px;
+    right: 20px;
+    position: absolute;
+    width: 240px;
+    z-index: 2;
+  }
+  #filter-controls {
+    background-color: white;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+    padding: 20px 30px 20px 30px;
+    margin-top: 70px;
+    margin-bottom: 20px;
+    z-index: 2;
+    max-width: 420px;
+  }
+  #filter-controls.active {
+    display: block;
+  }
+  #filter-toggle {
+    cursor: pointer;
+    right: 0;
+    position: absolute;
+  }
+  #filter-toggle, #admin-link {
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+  }
+
+  .browse-page-header .container {
+    position: relative;
+  }
+</style>

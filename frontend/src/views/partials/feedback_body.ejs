@@ -1,0 +1,114 @@
+<main>
+
+    <%- include('header') %>
+
+    <div class="container" id="app">
+        <div class="row">
+
+
+          <div class="col s12">
+
+            <div class="content-panel rounded-panel">
+              <h5 id="feedback_title"> Please send us comments, suggestions, complaints and feedback about <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a></h5>
+              <form id="feedback_form">
+                <div class="input-field">
+                  <select id="categories" class="grey-text">
+                    <option value="5" disabled selected>Choose the category *</option>
+                    <option value=1 >Suggestion</option>
+                    <option value=2>Complaint</option>
+                    <option value=3>Error</option>
+                    <option value=4>General</option>
+                    <option value=0>Other</option>
+                  </select>
+                </div>
+                <div class="input-field">
+                  <!-- <i class="material-icons prefix">mode_edit</i> -->
+                  <textarea id="message" class="materialize-textarea validate" required="" aria-required="true"></textarea>
+                  <label for="message">Message *</label>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6 l6">
+                    <input type="text" id="author">
+                    <label for="author">Author (optional)</label>
+                  </div>
+                  <div class="input-field col s12 m6 l6">
+                    <input type="email" id="contact_email" class="validate error">
+                    <label for="contact_email"  data-error="wrong format" data-success="right format">Contact email (optional)</label>
+                  </div>
+                </div>
+                <div class="g-recaptcha" data-sitekey="6LeITCoUAAAAALkPIv7Zb-2Ik3vRCzu3aZPq0XIF" data-callback="gResponse"></div>
+              </form>
+              <br>
+              <div id="result_form"></div>
+              <div class="hide" id="back_button_div"><a class="btn-flat <%=style.button_text_1%> waves-effect waves-light <%=style.button_1%>" href="" id="back_button">Go back</a></div>
+              <button class="btn-flat <%=style.button_text_1%> waves-effect waves-light <%=style.button_1%>" type="button" id="submitFeedback" disabled>Submit
+                <i class="material-icons right">send</i>
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="progress grey lighten-2" id="email_progress">
+    <div class="indeterminate <%=style.button_1%>"></div>
+  </div>
+</main>
+<%- include('footer') %>
+</body>
+</html>
+<script src="/javascripts/useful_func.js"></script>
+<script>
+  var res = "";
+  $( document ).ready(function() {
+    var loc = window.location.href
+    loc = loc.replace(/(feedback)/, '');
+    // document.getElementById('create_link_li').classList.add('active');
+    // document.getElementById('create_link_side_li').classList.add('active');
+    document.getElementById('back_button').setAttribute('href', loc );
+    $("#submitFeedback").click(
+        function(){
+          grecaptcha.reset();
+          document.getElementById('result_form').innerHTML ="";
+          document.getElementById('email_progress').style.display = "block";
+          var resCheck = (validateText($("#message").val()) && validateArray($("#categories").val()));
+          console.log(resCheck);
+          if (resCheck){
+            var auth = validateText($("#author").val());
+            var cont = validateEmail($("#contact_email").val());
+            var formData = {
+              message: $("#message").val(),
+              author: auth,
+              categories: $("#categories").val(),
+              contact_email: cont,
+              recaptcha: res
+            }
+            //console.log(formData);
+            axios.post('/api/feedback', formData)
+            .then(function (response) {
+              //console.log(response.data);
+              document.getElementById('email_progress').style.display = "none";
+              $('#feedback_form').addClass('hide');
+              $('#submitFeedback').addClass('hide');
+              document.getElementById('feedback_title').innerText= "Thank you for submitting feedback";
+              $('#back_button_div').removeClass('hide');
+              //window.location = '/system/created?message=1';
+            })
+            .catch(function (error) {
+              document.getElementById('email_progress').style.display = "none";
+              //console.log(error);
+            })
+            return false;
+          } else {
+            document.getElementById('email_progress').style.display = "none";
+            document.getElementById('result_form').innerHTML ="<p style='color: red'>Please check if you've filled all required fields and all options</p>";
+          }
+        }
+    );
+  });
+
+  function gResponse(g_response) {
+    res = g_response;
+    document.getElementById('submitFeedback').disabled = false;
+  }
+</script>
+<%- include('analytics') %>

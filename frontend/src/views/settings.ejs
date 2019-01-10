@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+  <script src="/javascripts/materialize.min.js"></script>
+  <script type="text/javascript" src="/javascripts/validator.min.js"></script>
+  <script>
+  $(document).ready(function(e) {
+    $(".button-collapse").sideNav();
+    //to display modified selects
+    $('select').material_select();
+    document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+  });
+  </script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+<body>
+  <script src="/javascripts/ajax.js"></script>
+  <script src="/javascripts/useful.js"></script>
+  <%- include('partials/navbar') %>
+  <%- include('partials/header') %>
+  <main>
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col s12 m12 l6">
+
+          <p>If you would like <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> to send all future private links to a personal email account (e.g. Gmail or Hotmail) instead of <%=environment.email_reg_hoster%>, please enter your personal email address below.
+            You will be sent a one-time link to your work email to confirm this change.</p>
+          <p>Why would I want to change my email address? I thought <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> was secure?</p>
+          <p><a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> was designed with security in mind. There are only two scenarios where sensitive information may be compromised: (i) there is a leak of the list of active tokens from our system (which is highly unlikely) or (ii) the University accesses your email account to determine which tokens you were sent (which in most cases would be a breach of the Data Protection Act (1998)).
+            By adding a personal email you are eliminating the possibility of your employer knowing that you have requested to access <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a></p>
+          <p style="color: red"><strong>Please remember that from the moment you successfully change your email address <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> will start sending private links and messages to your new address.</strong></p>
+
+        </div>
+        <div class="col s12 m12 l6">
+
+          <div class="content-panel rounded-panel">
+            <div class="row">
+              <div class=" col s12">
+                <ul class="tabs">
+                  <li class="tab col s6"><a href="#update_email" class="active">Update Email</a></li>
+                  <li class="tab col s6"><a href="#unsubscribe">Unsubscribe</a></li>
+                </ul>
+                <div id="update_email" class="col s12">
+                  <br>
+                  <h5 >Update email</h5>
+                  <p id="disclaimer" class="hide"></p>
+                  <form id="email_form">
+                    <div class="row">
+                      <%if (environment.email_domain === true) {%>
+                      <div class="input-field col s6 m8 l8">
+                        <input id="working_email" type="text" class="right-align" autocomplete="off">
+                        <label for="working_email"><%=environment.email_settings%></label>
+                      </div>
+                      <% } else {%>
+                        <div class="input-field">
+                          <input id="working_email" type="email" class="validate" autocomplete="off">
+                          <label for="working_email" data-error="wrong format" data-success="right format"><%=environment.email_settings%></label>
+                        </div>
+                      <% } %>
+                      <span id="email_zone" class="email_zone"><%=environment.email_domain_name%></span>
+                    </div>
+                    <div class="input-field">
+                      <input id="email" type="email" class="validate" autocomplete="off">
+                      <label for="email" data-error="wrong format" data-success="right format">Your personal email</label>
+                    </div>
+                    <div class="input-field">
+                      <input id="email-2" type="email" class="validate" autocomplete="off">
+                      <label for="email-2" data-error="wrong format" data-success="right format">Retype your personal email</label>
+                    </div>
+
+                    <button class="btn-flat <%=style.button_text_1%> waves-effect waves-light <%=style.button_1%>" type="button" id="submitForm" value="submit" disabled>Update Email
+                      <i class="material-icons right">send</i>
+                    </button>
+                  </form>
+                  <div id="back_panel" style="display: none" class="col s12">
+                    <p class="center-align">
+                      <a href="./browse"
+                         class="btn-flat <%=style.button_text_1%> waves-effect waves-light btn-large <%=style.button_1%>"
+                         id="start">Get Back</a>
+                    </p>
+                  </div>
+                  <br>
+                  <div id="result_form"></div>
+                </div>
+
+                <div id="unsubscribe" class="col s12">
+                  <br>
+                  <h5 >Unsubscribe</h5>
+                  <p id="disclaimer" class="hide"></p>
+                  <form id="unsubscribe_form">
+                    <div class="row">
+                      <%if (environment.email_domain === true) {%>
+                      <div class="input-field col s6 m8 l8">
+                        <input id="working_email_unsubscribe" type="text" class="right-align" autocomplete="off">
+                        <label for="working_email_unsubscribe"><%=environment.email_settings%></label>
+                      </div>
+                      <% } else {%>
+                      <div class="input-field">
+                        <input id="working_email_unsubscribe" type="email" class="validate" autocomplete="off">
+                        <label for="working_email_unsubscribe" data-error="wrong format" data-success="right format"><%=environment.email_settings%></label>
+                      </div>
+                      <% } %>
+                      <span class="email_zone" ><%=environment.email_domain_name%></span>
+                    </div>
+                    <button class="btn-flat <%=style.button_text_1%> waves-effect waves-light <%=style.button_1%>" type="button" id="submitUnsibscribeForm" value="submit" disabled>Unsubscribe
+                      <i class="material-icons right">send</i>
+                    </button>
+                  </form>
+                  <div id="_unsubscribe_back_panel" style="display: none" class="col s12">
+                    <p class="center-align">
+                      <a href="./browse"
+                         class="btn-flat <%=style.button_text_1%> waves-effect waves-light btn-large <%=style.button_1%>"
+                         id="start">Get Back</a>
+                    </p>
+                  </div>
+                  <br>
+                  <div id="result_unsubscribe_form"></div>
+                </div>
+
+                <div class="row">
+                  <div class="g-recaptcha" data-sitekey="6LeITCoUAAAAALkPIv7Zb-2Ik3vRCzu3aZPq0XIF"
+                       data-callback="gResponse">
+                  </div>
+                </div><br>
+
+              </div>
+            </div>
+          </div>
+          <div class="progress grey lighten-2" id="email_progress">
+            <div class="indeterminate <%=style.button_1%>"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+  <%- include('partials/footer') %>
+</body>
+</html>
+
+
+<script src="/javascripts/useful_func.js"></script>
+<script>
+  var res ="";
+$( document ).ready(function() {
+  document.getElementById('settings_li').classList.add('active');
+
+});
+  // submitting change email form
+  $("#submitForm").click(
+      function(){
+        grecaptcha.reset();
+        document.getElementById('submitForm').disabled = true;
+        var w_em = validateEmail($("#working_email").val() + $("#email_zone").val());
+        var e_1 = validateEmail($("#email").val());
+        var e_2 = validateEmail($("#email-2").val());
+        var emailCheck = (w_em && e_1 && e_2);
+        if (!emailCheck){
+          document.getElementById('result_form').innerHTML ="<p><span style='color: red; font-weight: bold'>Error:</span> Please check the emails you entered again. It appears that the email address you entered is not formatted correctly. </br> Valid example: youaddress@site.domain</p>";
+        } else {
+          if (e_1 === e_2){
+            var formData = {
+              working_email: w_em,
+              email: e_1,
+              recaptcha: res
+            }
+            sendAjaxForm('result_form', '/changes/insert_temp_mail', formData, 'email_progress', 'email_form');
+            document.getElementById('email-2').value ="";
+            document.getElementById('result_form').innerHTML ="";
+            document.getElementById('email_progress').style.display="block";
+            return false;
+          } else {
+            document.getElementById('result_form').innerHTML ="<p ><span style='color: red; font-weight: bold'>Error:</span> Please check that the email addressed in the second and third field (personal) match.</p>";
+          }
+        }
+      }
+  );
+
+
+  // submitting unsubscription form
+  $("#submitUnsibscribeForm").click(
+      function(){
+        grecaptcha.reset();
+        document.getElementById('submitUnsibscribeForm').disabled = true;
+        var w_em = validateEmail($("#working_email_unsubscribe").val() + $("#email_zone").val());
+        if (!w_em){
+          document.getElementById('result_unsubscribe_form').innerHTML ="<p><span style='color: red; font-weight: bold'>Error:</span> Please check the emails you entered again. It appears that the email address you entered is not formatted correctly. </br> Valid example: youaddress@site.domain</p>";
+        } else {
+            var formData = {
+              working_email: w_em,
+              recaptcha: res
+            }
+            sendAjaxForm('result_unsubscribe_form', '/changes/unsubscribe', formData, 'email_progress', 'unsubscribe_form');
+            document.getElementById('result_unsubscribe_form').innerHTML ="";
+            document.getElementById('email_progress').style.display="block";
+            return false;
+        }
+      }
+  );
+
+
+
+  $('#email').focus(function() {
+    document.getElementById('result_form').innerHTML='';
+  });
+
+  $('#email-2').focus(function() {
+    document.getElementById('result_form').innerHTML='';
+  });
+
+  $('#working_email').focus(function() {
+    document.getElementById('result_form').innerHTML='';
+  })
+
+  $('#working_email_unsubscribe').focus(function() {
+    document.getElementById('result_unsubscribe_form').innerHTML='';
+  })
+
+function gResponse(g_response) {
+  res = g_response;
+  document.getElementById('submitForm').disabled = false;
+  document.getElementById('submitUnsibscribeForm').disabled = false;
+}
+</script>

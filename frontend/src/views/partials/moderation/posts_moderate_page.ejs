@@ -1,0 +1,101 @@
+<div class="progress grey lighten-2" id="email_progress">
+  <div class="indeterminate <%=style.button_1%>"></div>
+</div>
+
+<template v-for="item in items">
+  <div class="message-panel" v-bind="{ id: 'textcard' + item.id}" :class="{contr: controversial(item.app_number_true, item.app_number_false)}">
+
+    <div class="message-panel--header">
+      <div class="col m4 s12">
+        <div class="category-label purple-text">
+          Accepted: <span style="font-weight: bold" v-bind="{ id: 'textapprove' + item.id}">{{item.app_number_true}}</span> Rejected: <span style="font-weight: bold" v-bind="{ id: 'textreject' + item.id}">{{item.app_number_false}}</span>
+        </div>
+        <span class="category-label red-text left" v-show="item.edit_status" :id="'textedition_sign'+ item.id"><strong>Post Edited</strong></span>
+      </div>
+      <div class="col m4 s12">
+        <div class="status" v-bind="{ id: 'textstatus' + item.id}" v-if="check_admin_approval(item.admin_activity) === true">You approved this</div>
+        <div class="status" v-bind="{ id: 'textstatus' + item.id}" v-else-if="check_admin_approval(item.admin_activity) === false">You rejected this</div>
+        <div class="status" v-bind="{ id: 'textstatus' + item.id}" v-else="check_admin_approval(item.admin_activity) === null"></div>
+      </div>
+
+      <div class="col m4 s12">
+        <div class="category-label" v-for="cat in item.cat_name" style="float: right">
+          {{cat}}
+        </div>
+        <div class="date">{{datetime(item.timestamp)}}</div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <div class="message-panel--content">
+
+      <!--<div style="display: none" v-bind="{ id:'textcategory' + item.id}">
+        <select id="categories" class="grey-text" style="display: block">
+            <% data.forEach((entry) =>{ %>
+          <option value="<%= entry.id %>" :selected="(<%= entry.id %>===item.categories[1]) ? 'selected' : null"><span style="color: purple"><%= entry.cat_name%></span></option>
+            <% }) %>
+        </select>
+      </div><br>-->
+
+      <div :id="'textoriginal' + item.id" style="display: none" v-show="(item.moderation)">
+        <div class="original_text" id="original_text">
+          <span>Original text:</span>
+          {{item.original_text}}
+        </div>
+      </div>
+
+      <p v-bind="{ id: 'text' + item.id}" style="overflow-wrap: break-word">{{ item.text }}</p>
+
+      <input v-bind="{ id: 'text_hidden' + item.id}" style="display: none" value="" type="text">
+
+      <div style="display: none" v-bind="{ id:'textreason' + item.id}">
+        <input type="text" placeholder="Please specify a reason for text alteration" name="reason" v-bind="{id:'text_reason_input' + item.id}">
+      </div>
+
+    </div>
+
+    <div class="message-panel--footer" style="padding: 15px">
+      <div class="row" v-bind="{ id: 'textbuttons' + item.id}">
+
+        <div class="col s6">
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" :id="'renew' + item.id" value="submit" @click="updateStatus(item.id, 2, 0, 'renew')" v-show="(item.moderation)">
+            Renew
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" :id="'archive' + item.id" value="submit" @click="archiveMessage(item.id, 0)" v-show="!(item.archive_status) && !item.moderation && !(check_admin_approval(item.admin_activity) === false)">
+            Reject
+          </a>
+
+          <a class="btn-flat center waves-effect waves-light left" type="button" :id="'edit' + item.id" value="submit" @click="editMessage(item.id, 0)" v-show="(!(item.moderation) && (check_admin_approval(item.admin_activity) === null) && (check_approval_count(item.app_number_true) !== true))">
+            Edit Post
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 left ok-button" type="button" :id="'ok' + item.id" value="submit" @click="saveArchiving(item.id, 1, 0)">Ok<i class="material-icons right">check</i></a>
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left nope-button" type="button" :id="'nope' + item.id" value="submit" @click="discardArchiving(item.id, 0)">Nope<i class="material-icons right">close</i></a>
+        </div>
+
+        <div class="col s6">
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light right green accent-4 " type="button" :id="'submit' + item.id" value="submit" @click="updateStatus(item.id, 0, 0, 'submit')" v-show="(!(item.moderation) && (check_admin_approval(item.admin_activity) !== true))">
+            Approve
+          </a>
+
+        </div>
+
+        <div class="col s12">
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 right save-button" type="button" :id="'save' + item.id" value="submit" @click="saveEditing(item.id, 0)">
+            Save
+            <!-- <i class="material-icons right">check</i> -->
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left discard-button" type="button" :id="'discard' + item.id" value="submit" @click="discardEditing(item.id, 0)">
+            Cancel
+            <!-- <i class="material-icons right">close</i> -->
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</template>

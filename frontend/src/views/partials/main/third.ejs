@@ -1,0 +1,8 @@
+<!-- views/partials/navbar.ejs -->
+<h5 class="header"><%= categories[1].cat_name %> posts</h5>
+
+<div class="progress grey lighten-2" id="email_progress">
+  <div class="indeterminate pink lighten-1"></div>
+</div>
+
+<post :item="item" v-for="item in items"></post>

@@ -1,0 +1,216 @@
+{
+  "API_version": "1",
+  "Authorization": {
+    "method": "JWT",
+    "type": "Bearer",
+    "url": "https://tools.ietf.org/html/rfc6750#section-2.1",
+    "example": "Bearer cn389ncoiwuencr"
+  },
+  "Endpoints_list": [
+    {
+      "name": "Login endpoint",
+      "address": "/login",
+      "method": "POST",
+      "description": "Login point for already registered API users",
+      "parameters": {
+        "email": {
+          "type": "string",
+          "description": "email address of the registered user",
+          "required": "true",
+          "location": "in the body of the post request"
+        },
+        "password": {
+          "type": "string",
+          "description": "password of the registered user",
+          "required": "true",
+          "location": "in the body of the post request"
+        }
+      },
+      "example": {
+        "email": "john.smith@email.com",
+        "password": "myCoMpLiCaTeDpass"
+      }
+    },
+    {
+      "name": "Change password endpoint",
+      "address": "/login",
+      "method": "POST",
+      "description": "Endpoint for already registered API users for password change",
+      "parameters": {
+        "email": {
+          "type": "string",
+          "description": "email address of the registered user",
+          "required": "true",
+          "location": "in the body of the post request"
+        },
+        "old_password": {
+          "type": "string",
+          "description": "old password of the registered user",
+          "required": "true",
+          "location": "in the body of the post request"
+        },
+        "new_password": {
+          "type": "string",
+          "description": "new password of the registered user",
+          "required": "true",
+          "location": "in the body of the post request"
+        }
+      },
+      "example": {
+        "email": "john.smith@email.com",
+        "old_password": "myCoMpLiCaTeDpass",
+        "new_password": "tbontb"
+      }
+    },
+    {
+      "name": "List of tracked types of actions",
+      "address": "/stats/tracking_actions_list",
+      "method": "GET",
+      "description": "Endpoint for retrieving the list and number of tracked actions in the system"
+    },
+    {
+      "name": "List of user types",
+      "address": "/stats/tracking_users_classification_list",
+      "method": "GET",
+      "description": "Endpoint for retrieving the list of presented user types in the system"
+    },
+    {
+      "name": "Action statistics endpoint",
+      "address": "/stats/tracking_actions",
+      "method": "GET",
+      "description": "Endpoint for action statistics about specific or all tracked records in the system",
+      "parameters": {
+        "action": {
+          "type": "string",
+          "description": "type of queried traked actions, out of all available in the system",
+          "required": "false",
+          "location": "in the url query"
+        },
+        "offset": {
+          "type": "integer",
+          "description": "offset in the requested data. purely for pagination of the results",
+          "required": "false",
+          "location": "in the url query"
+        }
+      },
+      "example": {
+        "url ": "/stats/tracking_actions?action=accessed browse page&offset=0"
+      }
+    },
+    {
+      "name": "List of threads/messages",
+      "address": "/threads",
+      "method": "GET",
+      "description": "Endpoint to retrieve all the threads/messages by category",
+      "parameters": {
+        "category_id": {
+          "type": "integer",
+          "description": "id of the category for queriing all the threads/messages from it (by default = 0 - ALL categories)",
+          "required": "false",
+          "location": "in the url query"
+        },
+        "offset": {
+          "type": "integer",
+          "description": "offset in the requested data. purely for pagination of the results",
+          "required": "false",
+          "location": "in the url query"
+        },
+        "order": {
+          "type": "integer",
+          "description": {
+            "general": "order of the retrieved list of threads/messges. default value - 3",
+            "values": [
+              {
+                "value": 0,
+                "description": "by creation timestamp"
+              },
+              {
+                "value": 1,
+                "description": "by overall votes value - votes_up - votes_down"
+              },
+              {
+                "value": 2,
+                "description": "by number of comments"
+              },
+              {
+                "value": 3,
+                "description": "by update time (creation time or appearing of a new comment in thread)"
+              }
+            ]
+          },
+          "required": "false",
+          "location": "in the url query"
+        },
+        "scope": {
+          "type": "integer",
+          "description": {
+            "general": "scope of the data retrieving (in time). Default value - 0",
+            "values": [
+              {
+                "value": 0,
+                "description": "7 days back"
+              },
+              {
+                "value": 1,
+                "description": "1 day back"
+              },
+              {
+                "value": 2,
+                "description": "31 day back"
+              },
+              {
+                "value": 3,
+                "description": "all time"
+              }
+            ]
+          },
+          "required": "false",
+          "location": "in the url query"
+        }
+      },
+      "example": {
+        "url ": "threads?category_id=1&scope=3&offset=0&order=1"
+      }
+    },
+    {
+      "name": "Views statistics endpoint",
+      "address": "/stats/views",
+      "method": "GET",
+      "description": "Endpoint for views statistics of a specific thread in the system",
+      "parameters": {
+        "thread_id": {
+          "type": "integer",
+          "description": "id of the queried thread/message",
+          "required": "true",
+          "location": "in the url query"
+        }
+      },
+      "example": {
+        "url ": "/stats/views?thread_id=1"
+      }
+    },
+    {
+      "name": "Number comments for specific thread",
+      "address": "/stats/views",
+      "method": "GET",
+      "description": "Endpoint for viewing statistics regarding amount of comments grouped by users classess for specific thread",
+      "parameters": {
+        "thread_id": {
+          "type": "integer",
+          "description": "id of the queried thread/message",
+          "required": "true",
+          "location": "in the url query"
+        }
+      },
+      "example": {
+        "url ": "/stats/comments_posted?thread_id=1"
+      }
+    },
+    {
+      "name": "List of categories",
+      "address": "/categories",
+      "method": "GET",
+      "description": "Endpoint for retrieving the list of presented categories in the system"
+    }
+  ]
+}

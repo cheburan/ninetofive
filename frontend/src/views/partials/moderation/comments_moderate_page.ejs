@@ -1,0 +1,96 @@
+<div class="progress grey lighten-2" id="email_progress">
+  <div class="indeterminate <%=style.button_1%>"></div>
+</div>
+
+<template v-for="item in items">
+  <div class="message-panel" v-bind="{ id: 'commentcard' + item.id}" :class="{contr: controversial(item.app_number_true, item.app_number_false)}">
+
+    <div class="message-panel--header">
+        <div class="col m4 s12">
+            <div class="category-label purple-text">
+                Accepted: <span style="font-weight: bold" v-bind="{ id: 'commentapprove' + item.id}">{{item.app_number_true}}</span> Rejected: <span style="font-weight: bold" v-bind="{ id: 'commentreject' + item.id}">{{item.app_number_false}}</span>
+            </div>
+            <span class="category-label red-text left" v-show="item.edit_status" :id="'commentedition_sign'+ item.id"><strong>Comment Edited</strong></span>
+        </div>
+
+        <div class="col m4 s12">
+            <div class="status" v-bind="{ id: 'commentstatus' + item.id}" v-if="check_admin_approval(item.admin_activity) === true">You approved this</div>
+            <div class="status" v-bind="{ id: 'commentstatus' + item.id}" v-else-if="check_admin_approval(item.admin_activity) === false">You rejected this</div>
+            <div class="status" v-bind="{ id: 'commentstatus' + item.id}" v-else="check_admin_approval(item.admin_activity) === null"></div>
+        </div>
+
+        <div class="col m4 s12">
+            <div class="date">From: <span style="color: #EC407A">{{item.author}}</span> on {{datetime(item.createdtime)}}</div>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+
+    <div class="message-panel--content">
+
+      <div :id="'commentoriginal' + item.id" style="display: none" v-show="(item.moderation)">
+        <div class="original_text pre-text" id="original_text">
+          <span>Original text:</span>
+          {{item.original_text}}
+        </div>
+      </div>
+
+      <p v-bind="{ id: 'comment' + item.id}" class="pre-text">{{ item.text }}</p>
+
+      <br>
+
+      <p>Comment context: <a v-bind="{ href:'/system/post_mod?id=' + item.parent_message + '&comment_id=' + item.id}" target="_blank"> link to post </a></p>
+
+      <input v-bind="{ id: 'comment_hidden' + item.id}" style="display: none" value="" type="text">
+
+      <div style="display: none" v-bind="{ id:'commentreason' + item.id}">
+          <input type="text" placeholder="Please specify a reason for text alteration" name="reason" v-bind="{id:'comment_reason_input' + item.id}">
+      </div>
+
+    </div>
+
+    <div class="message-panel--footer" style="padding: 15px">
+
+      <div class="row" v-bind="{ id: 'commentbuttons' + item.id}">
+
+        <div class="col s6">
+            <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light left red" type="button" :id="'archive' + item.id" value="submit" @click="archiveMessage(item.id, 1)" v-show="!(item.archive_status) && !item.moderation && !(check_admin_approval(item.admin_activity) === false)">
+              Reject
+            </a>
+
+            <a class="btn-flat waves-effect waves-light left" type="button" :id="'edit' + item.id" value="submit" @click="editMessage(item.id, 1)" v-show="(!(item.moderation) && (check_admin_approval(item.admin_activity) === null))">
+              Edit Comment
+            </a>
+
+            <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left" type="button" :id="'renew' + item.id" value="submit" @click="updateStatus(item.id, 2, 1, 'renew')" v-show="(item.moderation)">
+              Renew
+            </a>
+
+            <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 left ok-button" type="button" :id="'ok' + item.id" value="submit" @click="saveArchiving(item.id, 1, 1)">Ok<i class="material-icons right">check</i></a>
+            <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left nope-button" type="button" :id="'nope' + item.id" value="submit" @click="discardArchiving(item.id, 1)">Nope<i class="material-icons right">close</i></a>
+        </div>
+
+        <div class="col s6">
+
+            <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 right" type="button" :id="'submit' + item.id" value="submit" @click="updateStatus(item.id, 0, 1, 'submit')" v-show="(!(item.moderation) && (check_admin_approval(item.admin_activity) !== true))">
+              Approve
+            </a>
+
+        </div>
+
+        <div class="col s12">
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light green accent-4 right save-button" type="button" :id="'save' + item.id" value="submit" @click="saveEditing(item.id, 1)">
+            Save
+          </a>
+
+          <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light red left discard-button" type="button" :id="'discard' + item.id" value="submit" @click="discardEditing(item.id, 1)">
+            Cancel
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</template>

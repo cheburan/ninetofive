@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+      <meta http-equiv="refresh" content="3;url=/system/browse" />
+      <script src="/javascripts/materialize.min.js"></script>
+      <script>
+          $(document).ready(function(e) {
+              $(".button-collapse").sideNav();
+              document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+
+          });
+      </script>
+  </head>
+  <body>
+  <%- include('partials/navbar') %>
+  <main>
+        <div class="container" style="min-height: 100%">
+            <div class="col s12 m7">
+                <h5 class="header"><%= title %></h5>
+                <h6><%= message %></h6>
+            </div>
+        </div>
+  </main>
+  <%- include('partials/footer') %>
+  </body>
+</html>

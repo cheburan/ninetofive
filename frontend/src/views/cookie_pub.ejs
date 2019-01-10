@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/materialize.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+  <script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
+  <script src="javascripts/materialize.min.js"></script>
+  <main>
+
+    <div class="main-brand">
+      <div class="container">
+        <a href="/" target="_self">
+          <img src="/images/logos/<%=general.logo%>" alt="Main Logo">
+        </a>
+      </div>
+    </div>
+
+    <div class="primary-banner"></div>
+
+    <div class="container">
+      <%- include('partials/cookie_body.ejs') %>
+    </div>
+      <%- include('partials/footer') %>
+  </main>
+</body>
+</html>
+<script>
+  $(document).ready(function(e) {
+    var loc = 'http://'+ window.location.host
+    console.log('This is loc: ', loc);
+    loc = loc.replace(/(cookie)/, '');
+    //document.getElementById('feedback_link_1').setAttribute('href', loc + '/feedback');
+    document.getElementById('feedback_link_3').setAttribute('href', loc + '/feedback');
+
+  });
+
+</script>

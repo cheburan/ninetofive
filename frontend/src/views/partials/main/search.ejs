@@ -1,0 +1,44 @@
+<!-- views/partials/navbar.ejs -->
+
+<!-- Category buttons -->
+<template>
+  <button class="category-button" v-for="item in categories" :id="item.id" @click="requestData(item.id, 0, ord, scp)" :style="chosen_cat(item.id)" :class="{ mod_cat: item.permission }">{{item.cat_name}}</button>
+</template>
+
+<div class="cat_disclaimer row"><span style="color: <%=style.category_description%>; font-weight: bold;"><%=general.disclaimer_title%></span> <span v-html="description"></span></div>
+<br>
+
+
+<% if (polls && (polls.code ===1)) { %>
+<div class="carousel carousel-slider center" data-indicators="false">
+    <% polls.data.forEach(function(poll){ %>
+    <div class="carousel-item white-text"  id="<%= 'poll-item' + poll.id%>">
+        <h5 class="white-text" id="<%='poll-question' + poll.id%>"><%-poll.question%></h5>
+        <div id="<%='poll-options' + poll.id%>">
+            <form id="<%='poll-form' + poll.id%>" onsubmit="return submitForm(<%=poll.id%>)">
+                <% poll.options_array.forEach(function(option, index) { %>
+                <p>
+                    <input name="<%='option' + poll.id%>" type="radio" id="<%=poll.id + '_' + index%>" value="<%= option.option_num %>" required/>
+                    <label class="white-text" for="<%=poll.id + '_' + index%>"><%=option.option%></label>
+                </p>
+                <% });%>
+                <button class="btn green" id="<%='submit_button' + poll.id%>" type="submit" name="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <% }); %>
+</div>
+<% } %>
+
+<!--Polls Carousel-->
+<!--<div class="carousel carousel-slider center" data-indicators="true" v-show="available_poll">
+     <polls-carousel :poll="poll" v-for="poll in polls"></polls-carousel>
+</div>-->
+
+<!-- Progress indicator -->
+<div class="progress grey lighten-2" id="email_progress">
+  <div class="indeterminate <%=style.button_1%>"></div>
+</div>
+
+<!-- Results -->
+<post v-for="item in items" :item="item" :key="item.id" :page="pagination.current" :ord="ord" :scp="scp"></post>

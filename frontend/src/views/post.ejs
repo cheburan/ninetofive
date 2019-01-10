@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- import vue framework -->
+  <script type="text/javascript" src="/javascripts/moment.min.js"></script>
+  <script type="text/javascript" src="/javascripts/vue.js"></script>
+  <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <script type="text/javascript" src="/javascripts/es6-promise.min.js"></script>
+  <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/javascripts/moment.min.js"></script>
+  <!-- import axios for requests -->
+  <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+  <script src="/javascripts/materialize.min.js"></script>
+  <script type="text/javascript" src="/javascripts/vue-avatar.min.js"></script>
+  <script>
+  $(document).ready(function(e) {
+    $(".button-collapse").sideNav();
+    document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/system/feedback');
+  });
+  </script>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  <%- include('partials/header') %>
+  <main>
+    <div class="container">
+      <div class="content-panel rounded-panel">
+        <p id="message_text"><i class="material-icons" id="flipped-image">format_quote</i> <i><%= message.data.text %></i> <i class="material-icons">format_quote</i></p>
+      </div>
+      <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light <%=style.button_1%>" href="./browse?id=<%=id%>&p=<%=page%>&f=<%=filter%>&s=<%=sort%>">back to browse</a>
+      <!--comments part -->
+      <div id="app" class="comments-container">
+        <div class="progress grey lighten-2" id="email_progress">
+          <div class="indeterminate <%=style.button_1%>"></div>
+        </div>
+
+        <div class="content-panel rounded-panel comment-panel" id="comments">
+          <div class="comment-panel-header">
+            <h5>Comments</h5>
+          </div>
+          <ul>
+            <comment v-for="comment in comments" :comment="comment"></comment>
+          </ul>
+          <div class="comment-panel--submission">
+            <input class ="post_id" id="post_id" style="display: none" value="<%=id%>">
+            <div id="comment-box">
+              <div class="input-field">
+                <textarea id="commentText" class="materialize-textarea col s8 l8 m8" v-model="comment" data-length="2000"></textarea>
+                <label for="commentText" class="">Leave Comment</label>
+              </div>
+              <br>
+              <button class="btn right <%=style.button_1%>" @click="postComment" :disabled="!comment">Post comment</button>
+            </div>
+
+            <div class="clearfix"></div>
+          </div>
+        </div>
+
+        <div class="pagination center">
+          <button class="btn <%=style.button_1%>" @click="requestComments(pagination.current, (pagination.current-2) * pagination.per_page)"
+          :disabled="!pagination.prev">
+            Prev
+          </button>
+          <span v-cloak>Page {{pagination.current}}</span>
+          <button v-if="pagination.last >= pagination.per_page" class="btn <%=style.button_1%>" @click="requestComments(pagination.current, pagination.current * pagination.per_page)"
+            :disabled="!pagination.last">
+            Next
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<template id="comment-template">
+  <li class="comment-item">
+    <!-- <div class="col s12 right-align date">{{date(comment.createdtime)}}</div> -->
+    <avatar :username="comment.author"></avatar>
+    <p class="title"><strong>{{comment.author}}</strong> said on <strong>{{datetime(comment.createdtime)}}</strong><span v-show="comment.edit_status" :id="'textedition_sign'+ comment.id" style="color: #310c58"><strong>(after moderation)</strong></span>:</p>
+    <p id="message_text">{{comment.text}}</p>
+  </li>
+</template>
+
+</body>
+</html>
+
+<script type="text/javascript" src="/javascripts/vue_comments.js"></script>
+
+
+<style media="screen">
+  .content-panel.comment-panel {
+    margin-top: 50px;
+    padding: 0px;
+  }
+
+  .comment-panel--submission {
+    padding: 20px;
+  }
+
+  .comment-panel-header {
+    border-bottom: #e1e1e1 1px solid;
+    padding: 15px;
+    position: relative;
+  }
+  .comment-panel-header button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
+  .comment-panel .comment-panel-header {
+    padding: 20px;
+  }
+  .comment-panel .comment-panel-header h5 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .comment-panel ul {
+    margin: 0;
+    padding: 0;
+  }
+  .comment-panel .comment-item {
+    min-height: 70px;
+    padding: 20px;
+    padding-left: 80px;
+    position: relative;
+  }
+  .comment-panel .comment-item .avatar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+  }
+
+</style>

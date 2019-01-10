@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/materialize.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- For Facebook sharing -->
+    <meta name="title" content="Anonymous employee voice platform"/>
+    <meta name="description" content="Anonymous online discussion for <%=index.meta_description%>"/>
+    <meta property="og:title" content="NINEtoFIVE.work at <%= index.organisation%>" />
+    <meta property="og:site_name" content="NINEtoFIVE.work"/>
+    <meta property="og:image" content="<%=index.host%>/images/logos/logo1.svg"/>
+    <meta property="og:description" content="NINEtoFIVE.work is secure anonymous communication platform that provides a space for <%=index.users%> to have open and honest discussions without fear of sanction. Although hosted by <%=index.hoster%> the system can be used by any <%=index.users_singular%> of <%=index.organisation%>."/>
+
+    <!-- For Twitter Sharing -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@9to5work">
+    <meta name="twitter:title" content="NINEtoFIVE.work at <%=index.organisation%>">
+    <meta name="twitter:description" content="Anonymous online discussion for <%=index.meta_description%>">
+    <meta name="twitter:creator" content="@creator_username">
+    <meta name="twitter:image" content=<%=index.host%>/images/logos/logo1.svg">
+    <meta name="twitter:domain" content="<%=index.host%>">
+
+</head>
+
+<body>
+<script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
+<script src="javascripts/materialize.min.js"></script>
+
+<main>
+
+    <div class="main-brand">
+        <div class="container">
+            <a href="/" target="_self">
+                <img src="/images/logos/<%=general.logo%>" alt="Main Logo">
+            </a>
+        </div>
+    </div>
+
+    <div class="primary-banner"></div>
+
+    <div class="container">
+
+        <div class="page-wrapper">
+
+            <div class="row">
+                <div class="col s12">
+                    <div class="content-panel rounded-panel quote-panel">
+                        <h3 class="center-align quote">
+                            A place for <%=index.organisation%> <%=index.users%> to anonymously discuss issues, concerns and suggestions about their workplace.
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <div class="content-panel rounded-panel feature-panel">
+                        <div class="panel-content">
+                            <h3 class="center-align">
+                                Are you ready to anonymously discuss the workplace environment at <%=index.organisation%> with your colleagues?
+                            </h3>
+                            <p class="center-align"><a href="<%=link%>"
+                                                       class="btn-flat <%=style.button_text_1%> waves-effect waves-light btn-large <%=style.button_1%>"
+                                                       id="start">Get Started</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <div class="content-panel rounded-panel">
+                        <p style="font-size: 16px" class="center-align">
+                            <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is a secure anonymous communication platform for <%=index.users%> to have open and honest discussions without fear of sanction.
+                            <a target="_blank" href="./">NINE<span style="font-size: 10px">TO</span>FIVE.<span style="font-size: 10px">WORK</span></a> is made available with support from <a href="<%=general.hoster_link%>" target="_blank"><%=index.hoster%></a> and is available to all <%=index.users%> of <%=index.organisation%>. Our goal is that issues raised, and discussion around these issues, will feed into <%=index.hoster%> policy and plans.
+                            This anonymous discussion platform is, being deployed from <%=index.deployment_dates%> to <%=index.users%> at <%=index.organisation%>. Please be constructive in your messages and comments (your views on this deployment are very <a target="_blank" href="./feedback">welcome</a>).
+                            <br>
+                        </p>
+                        <br>
+                        <p class="center-align">
+                            <a class="btn-flat <%=style.button_text_1%> waves-effect waves-light btn-large <%=style.button_1%>" href="/about">Learn more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+                <div id="share-buttons" class="row col s12">
+                    <table style="width: 100%" id="shareTable">
+                        <tr>
+                            <td>
+                                <a href="mailto: <%-index.mailto%>">
+                                    <img src="/images/icons/ic_email_black_48px.svg" alt="Share via email"><br>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<%=index.host%>"
+                                   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                                   target="_blank" title="Share on Facebook">
+                                    <img src="/images/icons/facebook-box.svg" alt="Share via facebook">
+                                </a>
+                            </td>
+                            <td>
+                                <a href="https://twitter.com/share?url=<%=index.host%>&<%=index.twitter%>"
+                                   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                                   target="_blank" title="Share on Twitter">
+                                    <img src="/images/icons/twitter-box.svg" alt="Share via Twitter">
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+        </div>
+
+    </div>
+
+</main>
+<%- include('partials/footer') %>
+</body>
+
+</html>
+<script>
+  $(document).ready(function (e) {
+    document.getElementById('feedback_link_3').setAttribute('href', 'http://'+ window.location.host + '/feedback');
+  });
+</script>

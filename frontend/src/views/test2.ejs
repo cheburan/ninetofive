@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title><%= title %></title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- import vue framework -->
+      <script type="text/javascript" src="/javascripts/vue.js"></script>
+      <link rel="stylesheet" href="/stylesheets/materialize.min.css" />
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script>
+      <!-- import axios for requests -->
+      <script type="text/javascript" src="/javascripts/axios.min.js"></script>
+      <script src="/javascripts/materialize.min.js"></script>
+      <script>
+          $(document).ready(function(e) {
+            $(".button-collapse").sideNav();
+          });
+      </script>
+  </head>
+  <body>
+  <%- include('partials/navbar') %>
+  <main>
+        <div class="container">
+            <h1 class="center-align"><%= title %></h1>
+            <div id="app">
+                <div id="comments">
+                    <ul class="collection with-header">
+                        <li class="collection-header"><h5>Comments</h5></li>
+                        <li class="collection-item avatar">
+                            <img src="/images/avatar.png" alt="avatar" class="circle">
+                            <span class="title">says:</span>
+                            <p>Some comment about sometihng!</p>
+                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <img src="/images/avatar.png" alt="avatar" class="circle">
+                            <span class="title">says:</span>
+                            <p>Some comment about sometihng!</p>
+                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+  </main>
+  <%- include('partials/footer') %>
+  </body>
+</html>
+
+<script>
+
+</script>
